@@ -66,10 +66,18 @@ app.post('/messages', async (req, res) => {
     }
 })
 
-app.get('/messages', async (req, res) => {
-    const query = {}
-    const result = await messages.find(query).toArray();
-    res.send(result)
+app.get('/messages', verifyJWT, async (req, res) => {
+    const email = req.decoded.email;
+    const user = await users.findOne({ email: email });
+    if (!user) {
+        return res.send([]);
+    }
+    if (user?.role === "staff" || user?.role === "admin") {
+        const result = await messages.find({}).sort({ _id: -1 }).toArray();
+        return res.send(result)
+    }
+
+    return res.send([])
 })
 
 
@@ -222,6 +230,16 @@ app.get('/booking', verifyJWT, async (req, res) => {
     res.send(result);
 })
 
+app.get('/all-appointments', verifyJWT, async (req, res) => {
+    const email = req.decoded.email;
+    const user = await users.findOne({ email: email });
+    if (user.role === "admin" || user.role === "staff") {
+        const result = await bookings.find({}).sort({ _id: -1 }).toArray();
+        res.send(result)
+    } else {
+        res.send([])
+    }
+})
 
 app.listen(port, () => {
     console.log('server is running on port' + port);
