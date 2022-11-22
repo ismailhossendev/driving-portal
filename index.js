@@ -27,13 +27,13 @@ const payment = client.db("drivingPortal").collection("payment");
 
 
 // connect to the database
-client.connect(err => {
-    if (err) {
-        console.log('Error connecting to database', err);
-    } else {
-        console.log('Connected to database');
-    }
-});
+// client.connect(err => {
+//     if (err) {
+//         console.log('Error connecting to database', err);
+//     } else {
+//         console.log('Connected to database');
+//     }
+// });
 
 
 const verifyJWT = (req, res, next) => {
@@ -84,6 +84,11 @@ app.post('/messages', async (req, res) => {
         })
     }
 })
+
+
+app.get('/', (req, res) => {
+    res.send("Serve is running")
+});
 
 app.get('/messages', verifyJWT, async (req, res) => {
     const email = req.decoded.email;
@@ -423,3 +428,5 @@ app.get('/confirmation/:id', async (req, res) => {
 app.listen(port, () => {
     console.log('server is running on port' + port);
 })
+
+module.exports = app;
