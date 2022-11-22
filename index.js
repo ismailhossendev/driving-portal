@@ -26,14 +26,6 @@ const messages = client.db("drivingPortal").collection("messages");
 const payment = client.db("drivingPortal").collection("payment");
 
 
-// connect to the database
-// client.connect(err => {
-//     if (err) {
-//         console.log('Error connecting to database', err);
-//     } else {
-//         console.log('Connected to database');
-//     }
-// });
 
 
 const verifyJWT = (req, res, next) => {
